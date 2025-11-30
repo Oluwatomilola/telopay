@@ -1,0 +1,20 @@
+{
+  "detectors_to_exclude": "solc-version,assembly-usage,low-level-calls",
+  "exclude_informational": true,
+  "exclude_low": true,
+  "exclude_medium": false,
+  "exclude_high": false,
+  "exclude_optimization": false,
+  "filter_paths": "lib/",
+  "legacy_ast": false,
+  "hardhat_ignore_compatibility": false,
+  "check_visibility": false,
+  "pessimistic": false,
+  "concrete_incompleteness": false,
+  "implicit_override": true,
+  "missing_inheritance": true,
+  "naming_convention": {
+    "check_underscore": true,
+    "ignore": []
+  }
+}

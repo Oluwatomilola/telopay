@@ -1,8 +1,9 @@
 import { useReadContract, useWriteContract, useWaitForTransactionReceipt } from 'wagmi'
 import { parseAbi } from 'viem'
+import type { TelopayPayment, PaymentLimits, ContractBalance } from '@/types/contract'
 
 // Contract ABI for Telopay
-const telopayAbi = parseAbi([
+export const telopayAbi = parseAbi([
   'function payETH() payable',
   'function payUSDC(uint256 amount)',
   'function getBalance() view returns (uint256 ethBalance, uint256 usdcBalance)',

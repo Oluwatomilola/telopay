@@ -12,7 +12,6 @@ import {
 import { TransactionStatus } from '@/components/transaction-status'
 
 const CONTRACT_ADDRESS = process.env.NEXT_PUBLIC_TELOPAY_CONTRACT || '0x...'
-const USDC_CONTRACT = process.env.NEXT_PUBLIC_USDC_CONTRACT_BASE || '0x...'
 
 export function PaymentForm() {
   const { address } = useAccount()
@@ -22,9 +21,17 @@ export function PaymentForm() {
   const [isProcessing, setIsProcessing] = useState(false)
 
   // Get token contract based on network
-  const usdcContract = chainId === 84532 
-    ? (process.env.NEXT_PUBLIC_USDC_CONTRACT_SEPOLIA || '0x...')
-    : USDC_CONTRACT
+  const getUsdcContract = () => {
+    if (chainId === 84532) {
+      // Base Sepolia
+      return process.env.NEXT_PUBLIC_USDC_CONTRACT_SEPOLIA || '0x...'
+    } else {
+      // Base Mainnet
+      return process.env.NEXT_PUBLIC_USDC_CONTRACT_BASE || '0x...'
+    }
+  }
+  
+  const usdcContract = getUsdcContract()
 
   // Balance queries
   const { data: ethBalance } = useBalance({
@@ -35,7 +42,7 @@ export function PaymentForm() {
   const { data: usdcBalance } = useBalance({
     address,
     token: usdcContract as `0x${string}`,
-    query: { enabled: !!address && selectedToken === 'USDC' }
+    query: { enabled: !!address }
   })
 
   // Contract preparation for ETH payment

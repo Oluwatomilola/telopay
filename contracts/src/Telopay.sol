@@ -82,7 +82,7 @@ contract Telopay is Ownable, ReentrancyGuard, Pausable {
         validETHAmount(msg.value) 
     {
         bytes32 paymentId = keccak256(
-            abi.encodePacked(msg.sender, msg.value, block.timestamp, tx.origin)
+            abi.encodePacked(msg.sender, msg.value, block.timestamp, block.chainid)
         );
         
         payments[paymentId] = Payment({
@@ -106,12 +106,23 @@ contract Telopay is Ownable, ReentrancyGuard, Pausable {
         whenNotPaused 
         validUSDCAmount(amount) 
     {
-        // Transfer USDC from sender to contract
+        // Validate amount is not zero
+        require(amount > 0, "Amount must be greater than zero");
+        
+        // Check sender has sufficient allowance
+        uint256 allowance = usdcToken.allowance(msg.sender, address(this));
+        require(allowance >= amount, "Insufficient allowance");
+        
+        // Check sender has sufficient balance
+        uint256 balance = usdcToken.balanceOf(msg.sender);
+        require(balance >= amount, "Insufficient balance");
+        
+        // Transfer USDC from sender to contract with safe transfer
         bool success = usdcToken.transferFrom(msg.sender, address(this), amount);
         require(success, "USDC transfer failed");
         
         bytes32 paymentId = keccak256(
-            abi.encodePacked(msg.sender, amount, block.timestamp, tx.origin)
+            abi.encodePacked(msg.sender, amount, block.timestamp, block.chainid)
         );
         
         payments[paymentId] = Payment({
