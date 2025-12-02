@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.19;
+pragma solidity ^0.8.20;
 
 import "forge-std/Test.sol";
 import "../src/Telopay.sol";
-import "@openzeppelin/contracts/mocks/ERC20Mock.sol";
+import "@openzeppelin/contracts/mocks/token/ERC20Mock.sol";
 
 contract TelopayTest is Test {
     Telopay public telopay;
